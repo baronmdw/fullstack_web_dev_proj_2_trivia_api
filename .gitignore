@@ -1,6 +1,7 @@
 .vscode
 __pycache__
 venv
+backend/project2/
 
 # OS generated files #
 ######################

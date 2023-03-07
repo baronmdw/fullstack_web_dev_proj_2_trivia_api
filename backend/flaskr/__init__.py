@@ -11,7 +11,12 @@ QUESTIONS_PER_PAGE = 10
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    setup_db(app)
+    with app.app_context():
+        setup_db(app)
+
+    @app.route("/")
+    def hello():
+        return "Hello World"
 
     """
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
