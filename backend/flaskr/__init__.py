@@ -35,17 +35,22 @@ def create_app(dbURI='', test_config=None):
     """
 
     @app.route("/categories", methods=['GET'])
-    def hello():
+    def get_categories():
+        # This endpoint serves get requests to return all categories available in the database
         try:
+            # ok path: query all categories from database
             categories = Category.query.all()
             categories_formatted = {}
+            # loop through all elements of the result and format them --> build up returnbody
             for category in categories:
                 to_add = category.format()
                 categories_formatted[to_add['id']] = to_add['type']
+            # return JSON object containing the formatted categories and the successmessage
             return jsonify({
                 "categories": categories_formatted,
                 "success": True
                 })
+        # in case of failure return error 404 (not found)
         except:
             abort(404)
     """
