@@ -8,15 +8,22 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
-def create_app(test_config=None):
+def create_app(dbURI='', test_config=None):
     # create and configure the app
     app = Flask(__name__)
-    with app.app_context():
+    app.config.from_mapping(
+        SQLALCHEMY_DATABASE_URI='postgresql://{}:{}@{}/{}'.format('student','student','localhost:5432', 'trivia')
+    )
+    if dbURI:
+        setup_db(app, dbURI)
+    else:
         setup_db(app)
 
     @app.route("/")
     def hello():
-        return "Hello World"
+        categories = Category.query.all()
+        categories_formatted = [cat.format() for cat in categories]
+        return jsonify({"cats": categories_formatted})
 
     """
     @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
