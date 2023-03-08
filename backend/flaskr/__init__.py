@@ -66,18 +66,23 @@ def create_app(dbURI='', test_config=None):
             # ok path: query all categories from database
             categories = Category.query.all()
             categories_formatted = {}
-            # loop through all elements of the result and format them --> build up returnbody
+            # loop through all elements of the result and format them --> build up returnbody for categories
             for category in categories:
                 to_add = category.format()
                 categories_formatted[to_add['id']] = to_add['type']
+            # query all questions from database and format them
             questions = Question.query.all()
             questions_formatted = [ques.format() for ques in questions]
+            # check if request was not on last page
             if len(questions_formatted)>pageNr*QUESTIONS_PER_PAGE:
                 questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:pageNr*QUESTIONS_PER_PAGE]
+            # check if request was on last page
             elif len(questions_formatted)>(pageNr-1)*QUESTIONS_PER_PAGE:
                 questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:]
+            # if request was on page behind last page (available pages)
             else:
                 abort(404)
+            # return requested content
             return jsonify({
                 "success": True,
                 "categories": categories_formatted,
@@ -94,7 +99,7 @@ def create_app(dbURI='', test_config=None):
 
 
     """
-    @TODO:
+    @Done:
     Create an endpoint to handle GET requests for questions,
     including pagination (every 10 questions).
     This endpoint should return a list of questions,
