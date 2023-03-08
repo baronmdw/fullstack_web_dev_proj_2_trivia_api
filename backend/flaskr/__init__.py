@@ -29,11 +29,16 @@ def create_app(dbURI='', test_config=None):
         return jsonify({"cats": categories_formatted})
 
     """
-    @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+    @Done: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
 
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        response.headers.add('Access-Control-Allow-Headers', 'GET, POST, PATCH, DELETE, OPTIONS')
+        return response
     """
-    @TODO: Use the after_request decorator to set Access-Control-Allow
+    @Done: Use the after_request decorator to set Access-Control-Allow
     """
 
     """
