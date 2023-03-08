@@ -61,6 +61,7 @@ def create_app(dbURI='', test_config=None):
     """
     @app.route("/questions", methods=['GET'])
     def get_questions():
+        # this endpoint serves get requests to get all questions and categories in the database
         try: 
             pageNr = request.args.get("page",1,int)
             # ok path: query all categories from database
