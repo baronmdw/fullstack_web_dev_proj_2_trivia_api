@@ -54,7 +54,7 @@ def create_app(dbURI='', test_config=None):
         except:
             abort(404)
     """
-    @TODO:
+    @Done:
     Create an endpoint to handle GET requests
     for all available categories.
     """
