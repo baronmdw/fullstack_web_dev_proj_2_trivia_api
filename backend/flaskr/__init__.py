@@ -172,7 +172,7 @@ def create_app(dbURI='', test_config=None):
         }), 404
     
     @app.errorhandler(422)
-    def err_not_found(error):
+    def err_not_processable(error):
         return jsonify({
             "success": False,
             "message": "The request could not be processed",
