@@ -23,10 +23,17 @@ class TriviaTestCase(unittest.TestCase):
         """Executed after reach test"""
         pass
 
-    def test_Hello(self):
-        res = self.client().get("/")
+    def test_get_categories(self):
+        # This test tests for the correct transmission of all categories
+        res = self.client().get("/categories")
+        content = json.loads(res.data)
 
-        self.assertEqual(res.json['cats'][6], "Hello World")
+        self.assertEqual(res.status_code, 200)
+        self.assertGreaterEqual(len(content['categories'].keys()), 1)
+        self.assertEqual(content['success'], True)
+    
+    # TODO (possibly): catch wrong methods for endpoint categories
+
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.

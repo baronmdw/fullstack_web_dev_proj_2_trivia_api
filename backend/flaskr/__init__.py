@@ -21,13 +21,6 @@ def create_app(dbURI='', test_config=None):
     
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-
-    @app.route("/")
-    def hello():
-        categories = Category.query.all()
-        categories_formatted = [cat.format() for cat in categories]
-        return jsonify({"cats": categories_formatted})
-
     """
     @Done: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
@@ -41,6 +34,20 @@ def create_app(dbURI='', test_config=None):
     @Done: Use the after_request decorator to set Access-Control-Allow
     """
 
+    @app.route("/categories", methods=['GET'])
+    def hello():
+        try:
+            categories = Category.query.all()
+            categories_formatted = {}
+            for category in categories:
+                to_add = category.format()
+                categories_formatted[to_add['id']] = to_add['type']
+            return jsonify({
+                "categories": categories_formatted,
+                "success": True
+                })
+        except:
+            abort(404)
     """
     @TODO:
     Create an endpoint to handle GET requests
