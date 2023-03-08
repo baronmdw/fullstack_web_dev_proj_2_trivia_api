@@ -56,7 +56,7 @@ The Categories endpoint is accessible via GET-Method and returns a JSON object t
 
 Request as follows:
 ```
-http://localhost:5000/categories
+curl http://localhost:5000/categories
 ```
 
 The result will look similar to this (if there have been no changes in the database the exact response will be returned):
