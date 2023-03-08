@@ -82,7 +82,7 @@ def create_app(dbURI='', test_config=None):
                 "success": True,
                 "categories": categories_formatted,
                 "questions": questions_paginated,
-                "totalQuestions": len(questions_formatted),
+                "total_questions": len(questions_formatted),
                 "currentCategroy": "ALL"
             })
         except Exception as e:
