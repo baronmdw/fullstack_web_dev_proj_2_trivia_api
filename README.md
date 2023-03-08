@@ -47,3 +47,29 @@ Pay special attention to what data the frontend is expecting from each API respo
 By making notes ahead of time, you will practice the core skill of being able to read and understand code and will have a simple plan to follow to build out the endpoints of your backend API.
 
 > View the [Frontend README](./frontend/README.md) for more details.
+
+# ENDPOINTS
+
+## CATEGORIES
+
+The Categories endpoint is accessible via GET-Method and returns a JSON object that contains a success-flag and a dictionary with all categories and their respective id in the database.
+
+Request as follows:
+```
+http://localhost:5000/categories
+```
+
+The result will look similar to this (if there have been no changes in the database the exact response will be returned):
+```
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true
+}
+```
