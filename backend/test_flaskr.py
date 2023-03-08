@@ -12,7 +12,6 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        # TODO: make sure to initiate the correct database, see: https://stackoverflow.com/questions/75523569/runtimeerror-a-sqlalchemy-instance-has-already-been-registered-on-this-flask
         
         self.database_name = "trivia_test"
         self.database_path = "postgresql://{}:{}@{}/{}".format('student','student','localhost:5432', self.database_name)
@@ -29,11 +28,26 @@ class TriviaTestCase(unittest.TestCase):
         content = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
-        self.assertGreaterEqual(len(content['categories'].keys()), 1)
-        self.assertEqual(content['success'], True)
+        self.assertGreaterEqual(len(content["categories"].keys()), 1)
+        self.assertEqual(content["success"], True)
     
     # TODO (possibly): catch wrong methods for endpoint categories
 
+    def test_get_questions(self):
+        res = self.client().get("/questions?page=1")
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertGreaterEqual(len(content["categories"].keys()), 1)
+        self.assertEqual(len(content["questions"]), 10)
+        self.assertEqual(content["success"], True)
+
+    def test_get_questions_fail(self):
+        res = self.client().get("/questions?page=1000000000")
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(content["success"], False)
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.

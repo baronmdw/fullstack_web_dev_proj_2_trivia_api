@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from werkzeug.exceptions import HTTPException
 import random
 
 from models import setup_db, Question, Category
@@ -58,6 +59,38 @@ def create_app(dbURI='', test_config=None):
     Create an endpoint to handle GET requests
     for all available categories.
     """
+    @app.route("/questions", methods=['GET'])
+    def get_questions():
+        try: 
+            pageNr = request.args.get("page",1,int)
+            # ok path: query all categories from database
+            categories = Category.query.all()
+            categories_formatted = {}
+            # loop through all elements of the result and format them --> build up returnbody
+            for category in categories:
+                to_add = category.format()
+                categories_formatted[to_add['id']] = to_add['type']
+            questions = Question.query.all()
+            questions_formatted = [ques.format() for ques in questions]
+            if len(questions_formatted)>pageNr*QUESTIONS_PER_PAGE:
+                questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:pageNr*QUESTIONS_PER_PAGE]
+            elif len(questions_formatted)>(pageNr-1)*QUESTIONS_PER_PAGE:
+                questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:]
+            else:
+                abort(404)
+            return jsonify({
+                "success": True,
+                "categories": categories_formatted,
+                "questions": questions_paginated,
+                "totalQuestions": len(questions_formatted),
+                "currentCategroy": "ALL"
+            })
+        except Exception as e:
+            if isinstance(e, HTTPException):
+                abort(e.code)
+            else:
+                abort(422)
+
 
 
     """
@@ -124,6 +157,21 @@ def create_app(dbURI='', test_config=None):
     and shown whether they were correct or not.
     """
 
+    @app.errorhandler(404)
+    def err_not_found(error):
+        return jsonify({
+            "success": False,
+            "message": "The requested resource could not be found",
+            "error": 404
+        }), 404
+    
+    @app.errorhandler(422)
+    def err_not_found(error):
+        return jsonify({
+            "success": False,
+            "message": "The request could not be processed",
+            "error": 422
+        }), 422
     """
     @TODO:
     Create error handlers for all expected errors
