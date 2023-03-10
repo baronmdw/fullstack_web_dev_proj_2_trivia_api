@@ -113,6 +113,7 @@ def create_app(dbURI='', test_config=None):
     """
     @app.route("/questions/<int:question_id>", methods=["DELETE"])
     def delete_question(question_id):
+        # This endpoint serves the deletion of a question with the id of the question being handed over
         try:
             questionToDelete = Question.query.get(question_id)
             questionToDelete.delete()
@@ -123,7 +124,7 @@ def create_app(dbURI='', test_config=None):
         except:
             abort(404)
     """
-    @TODO:
+    @Done:
     Create an endpoint to DELETE question using a question ID.
 
     TEST: When you click the trash icon next to a question, the question will be removed.
@@ -131,6 +132,7 @@ def create_app(dbURI='', test_config=None):
     """
     @app.route("/questions", methods=["POST"])
     def create_question():
+        # This endpoint serves the creation of a question with answer, category and difficulty
         try:
             newQuestion = request.get_json()
             if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
