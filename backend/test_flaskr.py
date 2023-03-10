@@ -133,6 +133,29 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(content["success"], False)
+
+    def test_quiz(self):
+        # This test ensures that the quizzes endpoint delivers a proper response on a correct request
+        res = self.client().post("/quizzes", json={
+            "previous_questions": [],
+            "quiz_category": 1
+        })
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(content["success"], True)
+        self.assertIsNotNone(content["question"])
+
+    def test_quiz(self):
+        # This test ensures that the quizzes endpoint reacts with a error message upon a false request
+        res = self.client().post("/quizzes", json={
+            "previous_questions": [],
+            "quiz_category": 100000
+        })
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(content["success"], False)
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.

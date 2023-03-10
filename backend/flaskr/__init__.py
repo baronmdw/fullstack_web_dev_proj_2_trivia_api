@@ -272,7 +272,7 @@ def create_app(dbURI='', test_config=None):
             "error": 500
         }), 500
     """
-    @TODO:
+    @Done:
     Create error handlers for all expected errors
     including 404 and 422.
     """
