@@ -76,7 +76,9 @@ The result will look similar to this (if there have been no changes in the datab
 
 ## QUESTIONS
 
-The questions endpoint is accesible via GET-METHOD needing a page number as input parameter and returns a JSON object that contains a success-flag, a dictionary with all categories and their respective id in the database, a list of 10 questions objects including their answers, categories and difficulties as well as the number of total questions in the database. The questions returned are depending on the page that has been requested.
+### GET-ENDPOINT
+
+The read all questions endpoint is accessible via GET-METHOD needing a page number as input parameter and returns a JSON object that contains a success-flag, a dictionary with all categories and their respective id in the database, a list of 10 questions objects including their answers, categories and difficulties as well as the number of total questions in the database. The questions returned are depending on the page that has been requested.
 
 Request as follows:
 ```
@@ -172,6 +174,62 @@ For a successful request the answer will look like this:
 }
 ```
 For an unsuccessful request the response will look like this:
+```
+{
+  "error": 404,
+  "message": "The requested resource could not be found",
+  "success": false
+}
+```
+
+### POST-ENDPOINT
+
+The questions creation endpoint is accessible via POST-METHOD needing a JSON-Object containing a string each for question and answer and integers for the difficulty (1-5) and the category of the question. All of the named options are mandatory. It returns a JSON-Object with a success status as well as the id, question, answer, difficulty and category of the created object.
+
+Request as follows:
+```
+curl -X POST http://localhost:5000/questions -H "Content-Type: application/json" -d "{\"question\":\"Test\", \"answer\":\"answer\", \"category\":1,  \"difficulty\":1}"
+```
+
+Successful request will result in this response:
+```
+{
+  "answer": "answer",
+  "category": 1,
+  "difficulty": 1,
+  "id": 25,
+  "question": "Test",
+  "success": true
+}
+```
+
+For an erroneous request the response will look like this:
+```
+{
+  "error": 400,
+  "message": "The request was not formatted correctly",
+  "success": false
+}
+```
+
+### DELETE-ENDPOINT
+
+The deletion of a question is accessible via DELETE-METHOD needing the id of the question that shall be deleted in the url and will return a JSON-Object containing the success-status and the id of the deleted question.
+
+Request as follows and replace ```<id>``` with the integer id of the question to delete:
+```
+curl -X DELETE http://localhost:5000/questions/<id>
+```
+
+Successful request will lead to following response:
+```
+{
+  "id": 25,
+  "success": true
+}
+``` 
+
+Trying to delete a non-existing questions will lead to this response:
 ```
 {
   "error": 404,
