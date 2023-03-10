@@ -30,8 +30,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertGreaterEqual(len(content["categories"].keys()), 1)
         self.assertEqual(content["success"], True)
-    
-    # TODO (possibly): catch wrong methods for endpoint categories
 
     def test_get_questions(self):
         # This test checks if the questions can be fetched successfully
@@ -162,10 +160,6 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(content["success"], False)
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
 
 
 # Make the tests conveniently executable
