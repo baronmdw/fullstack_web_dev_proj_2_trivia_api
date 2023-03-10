@@ -263,6 +263,14 @@ def create_app(dbURI='', test_config=None):
             "message": "The request could not be processed",
             "error": 422
         }), 422
+    
+    @app.errorhandler(500)
+    def err_internal(error):
+        return jsonify({
+            "success": False,
+            "message": "Something went wrong on serverside",
+            "error": 500
+        }), 500
     """
     @TODO:
     Create error handlers for all expected errors
