@@ -31,12 +31,12 @@ Completing this trivia app will give you the ability to structure plan, implemen
 The Categories endpoint is accessible via GET-Method and returns a JSON object that contains a success-flag and a dictionary with all categories and their respective id in the database.
 
 Request as follows:
-```
+```bash
 curl http://localhost:5000/categories
 ```
 
 The result will look similar to this (if there have been no changes in the database the exact response will be returned):
-```
+```json
 {
   "categories": {
     "1": "Science",
@@ -55,12 +55,12 @@ The result will look similar to this (if there have been no changes in the datab
 The get all questions of category endpoint is accessible via GET-METHOD needing a category number as input parameter and returns a JSON object that contains a success-flag, an array of all questions, the amount of questions and the current category.
 
 Request as follows and replace ```<category_id>``` with the number of the category that is being searched for:
-```
+```bash
 curl -X GET http://localhost:5000/categories/<category_id>/questions
 ```
 
 The result will look similar to this for a successful request:
-```
+```json
 {
   "current_category": 1,
   "questions": [
@@ -92,7 +92,7 @@ The result will look similar to this for a successful request:
 ```
 
 An erroneous request will lead to this response:
-```
+```json
 {
   "error": 404,
   "message": "The requested resource could not be found",
@@ -107,13 +107,14 @@ An erroneous request will lead to this response:
 The read all questions endpoint is accessible via GET-METHOD needing a page number as input parameter and returns a JSON object that contains a success-flag, a dictionary with all categories and their respective id in the database, a list of 10 questions objects including their answers, categories and difficulties as well as the number of total questions in the database. The questions returned are depending on the page that has been requested.
 
 Request as follows:
-```
+```bash
 curl http://localhost:5000/questions?page=<pagenr>
 ```
 replace ```<pagenr>``` with an integer you want to see the questions of
 
 For a successful request the answer will look like this:
-```{
+```json
+{
   "categories": {
     "1": "Science",
     "2": "Art",
@@ -200,7 +201,7 @@ For a successful request the answer will look like this:
 }
 ```
 For an unsuccessful request the response will look like this:
-```
+```json
 {
   "error": 404,
   "message": "The requested resource could not be found",
@@ -215,12 +216,12 @@ For an unsuccessful request the response will look like this:
 The questions creation endpoint is accessible via POST-METHOD needing a JSON-Object containing a string each for question and answer and integers for the difficulty (1-5) and the category of the question. All of the named options are mandatory. It returns a JSON-Object with a success status as well as the id, question, answer, difficulty and category of the created object.
 
 Request as follows:
-```
+```bash
 curl -X POST http://localhost:5000/questions -H "Content-Type: application/json" -d "{\"question\":\"Test\", \"answer\":\"answer\", \"category\":1,  \"difficulty\":1}"
 ```
 
 Successful request will result in this response:
-```
+```json
 {
   "answer": "answer",
   "category": 1,
@@ -232,7 +233,7 @@ Successful request will result in this response:
 ```
 
 For an erroneous request the response will look like this:
-```
+```json
 {
   "error": 400,
   "message": "The request was not formatted correctly",
@@ -245,12 +246,12 @@ For an erroneous request the response will look like this:
 The search questions endpoint is accessible via POST-METHOD needing a JSON-Object containing a string called by the key searchTerm. It returns a JSON object with a success status, an array with all questions that match the search-term, the amount of identified questions and the current category.
 
 Request as follows replacing ```<search-string>``` with the string that should be searched:
-```
+```bash
 curl -X POST http://localhost:5000/questions -H "Content-Type: application/json" -d "{\"searchTerm\":\"<search-string>\"}"
 ```
 
 Successful request will lead to following result (example made with "title" as search-string):
-```
+```json
 {
   "currentCategroy": "ALL",
   "questions": [
@@ -275,7 +276,7 @@ Successful request will lead to following result (example made with "title" as s
 ```
 
 Erroneous request will result in this response:
-```
+```json
 {
   "error": 400,
   "message": "The request was not formatted correctly",
@@ -289,12 +290,12 @@ Erroneous request will result in this response:
 The deletion of a question is accessible via DELETE-METHOD needing the id of the question that shall be deleted in the url and will return a JSON-Object containing the success-status and the id of the deleted question.
 
 Request as follows and replace ```<id>``` with the integer id of the question to delete:
-```
+```bash
 curl -X DELETE http://localhost:5000/questions/<id>
 ```
 
 Successful request will lead to following response:
-```
+```json
 {
   "id": 25,
   "success": true
@@ -302,7 +303,7 @@ Successful request will lead to following response:
 ``` 
 
 Trying to delete a non-existing questions will lead to this response:
-```
+```json
 {
   "error": 404,
   "message": "The requested resource could not be found",
@@ -317,12 +318,12 @@ Trying to delete a non-existing questions will lead to this response:
 This endpoint is accessible via the POST-METHOD and needs a JSON-object containing an array of already posted questions (previous_questions) and the category of the quiz (quiz_category). It returns a JSON-Object with a success status and the object of the next question.
 
 Request as follows replacing ```<previous_ids>``` with the ids of all questions that have already been posted separated by a comma (,) and ```<category_id>``` by the id of the category of the quiz (0 for all categories):
-```
+```bash
 curl -X POST http://localhost:5000/quizzes -H "Content-Type: application/json" -d "{\"previous_questions\":[<previous_ids>], \"quiz_category\":{\"id\":<category_id>}}" 
 ```
 
 A correct request will result in following response:
-```
+```json
 {
   "question": {
     "answer": "The Liver",
@@ -336,7 +337,7 @@ A correct request will result in following response:
 ```
 
 Searching for a non existent category will lead to this response:
-```
+```json
 {
   "error": 404,
   "message": "The requested resource could not be found",
