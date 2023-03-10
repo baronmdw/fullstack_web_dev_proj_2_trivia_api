@@ -138,7 +138,10 @@ class TriviaTestCase(unittest.TestCase):
         # This test ensures that the quizzes endpoint delivers a proper response on a correct request
         res = self.client().post("/quizzes", json={
             "previous_questions": [],
-            "quiz_category": 1
+            "quiz_category": {
+                "type": "test",
+                "id": 1
+            }
         })
         content = json.loads(res.data)
 
@@ -150,7 +153,10 @@ class TriviaTestCase(unittest.TestCase):
         # This test ensures that the quizzes endpoint reacts with a error message upon a false request
         res = self.client().post("/quizzes", json={
             "previous_questions": [],
-            "quiz_category": 100000
+            "quiz_category": {
+                "type": "test",
+                "id": 1000000
+            }
         })
         content = json.loads(res.data)
 

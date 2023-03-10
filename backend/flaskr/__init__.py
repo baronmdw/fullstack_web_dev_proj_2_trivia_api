@@ -228,9 +228,42 @@ def create_app(dbURI='', test_config=None):
     categories in the left column will cause only questions of that
     category to be shown.
     """
-
+    @app.route("/quizzes", methods=["POST"])
+    def play_quiz():
+        try:
+            inputData = request.get_json()
+            indexesUsed = inputData.get("previous_questions")
+            if inputData.get("quiz_category").get("id") == 0:
+                questions = Question.query.all()
+            else:
+                category = Category.query.filter(Category.id==inputData.get("quiz_category").get("id")).one_or_none()
+            # check if category exists
+                if category is None:
+                    abort (404)
+                #get all questions of category and filter for the ones that have not been posted yet
+                questions = Question.query.filter(Question.category==inputData.get("quiz_category").get("id")).all()
+                questions_formatted = [ques.format() for ques in questions]
+                questions_unused = [ques for ques in questions_formatted if ques["id"] not in indexesUsed]
+                # check if any questions are left and send response
+                if len(questions_unused) != 0:
+                    question_return = random.choice(questions_unused)
+                    return jsonify({
+                        "success": True,
+                        "question": question_return
+                    })
+                else: 
+                    return jsonify({
+                        "success": True,
+                        "question": False
+                    })
+        except Exception as e:
+            if isinstance(e, HTTPException):
+                abort(e.code)
+            else:
+                abort(422)
+        
     """
-    @TODO:
+    @Done:
     Create a POST endpoint to get questions to play the quiz.
     This endpoint should take category and previous question parameters
     and return a random questions within the given category,
