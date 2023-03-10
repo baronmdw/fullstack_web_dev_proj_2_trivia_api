@@ -132,26 +132,51 @@ def create_app(dbURI='', test_config=None):
     """
     @app.route("/questions", methods=["POST"])
     def create_question():
-        # This endpoint serves the creation of a question with answer, category and difficulty
-        try:
-            newQuestion = request.get_json()
-            if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
+        # This endpoint combines to post-request methods: one to get questions based on a search term and another one to create new questions
+        newQuestion = request.get_json()
+        if "searchTerm" in newQuestion:
+            try:
+                pageNr = 1
+                questionsThatMatch = Question.query.filter(Question.question.ilike('%'+newQuestion["searchTerm"]+'%'))
+                questions_formatted = [ques.format() for ques in questionsThatMatch]
+                # check if request was not on last page
+                if len(questions_formatted)>pageNr*QUESTIONS_PER_PAGE:
+                    questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:pageNr*QUESTIONS_PER_PAGE]
+                # check if request was on last page
+                elif len(questions_formatted)>(pageNr-1)*QUESTIONS_PER_PAGE:
+                    questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:]
+                # if request was on page behind last page (available pages)
+                else:
+                    abort(404)
+                # return requested content
+                return jsonify({
+                    "success": True,
+                    "questions": questions_paginated,
+                    "total_questions": len(questions_formatted),
+                    "currentCategroy": "ALL"
+                })
+            except:
                 abort(400)
-            questionToAdd = Question(question=newQuestion["question"], answer=newQuestion["answer"], category=newQuestion["category"], difficulty=newQuestion["difficulty"])
-            questionToAdd.insert()
-            return jsonify({
-                "success": True,
-                "id": questionToAdd.id,
-                "question": questionToAdd.question,
-                "answer": questionToAdd.answer,
-                "difficulty": questionToAdd.difficulty,
-                "category": questionToAdd.category
-            })
-        except Exception as e:
-            if isinstance(e, HTTPException):
-                abort(e.code)
-            else:
-                abort(422)
+        else:
+            # This endpoint serves the creation of a question with answer, category and difficulty
+            try:
+                if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
+                    abort(400)
+                questionToAdd = Question(question=newQuestion["question"], answer=newQuestion["answer"], category=newQuestion["category"], difficulty=newQuestion["difficulty"])
+                questionToAdd.insert()
+                return jsonify({
+                    "success": True,
+                    "id": questionToAdd.id,
+                    "question": questionToAdd.question,
+                    "answer": questionToAdd.answer,
+                    "difficulty": questionToAdd.difficulty,
+                    "category": questionToAdd.category
+                })
+            except Exception as e:
+                if isinstance(e, HTTPException):
+                    abort(e.code)
+                else:
+                    abort(422)
     """
     @Done:
     Create an endpoint to POST a new question,

@@ -81,12 +81,12 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_deletion(self):
         # This test checks, if deleting an existing question works correctly
-        res = self.client().delete("/questions/24")
+        res = self.client().delete("/questions/23")
         content = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(content["success"], True)
-        self.assertEqual(content["id"], 24)
+        self.assertEqual(content["id"], 23)
 
     def test_deletion_fail(self):
         # This test checks, if deleting a non-existing question raises the right error
@@ -95,6 +95,23 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(content["success"], False)
+
+    def test_search_question(self):
+        res = self.client().post("/questions", json={"searchTerm": "What"})
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertGreaterEqual(len(content["questions"]), 1)
+        self.assertGreaterEqual(content["total_questions"], 1)
+        self.assertEqual(content["success"], True)
+
+    def test_search_question_fail(self):
+        res = self.client().post("/questions")
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(content["success"], False)
+
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.
