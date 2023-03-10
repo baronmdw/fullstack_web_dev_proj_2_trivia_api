@@ -62,22 +62,22 @@ class TriviaTestCase(unittest.TestCase):
         content = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
-        self.assertEqual(res["success"], True)
-        self.assertIsNotNone(res["id"])
-        self.assertIsNotNone(res["question"])
+        self.assertEqual(content["success"], True)
+        self.assertIsNotNone(content["id"])
+        self.assertIsNotNone(content["question"])
 
     def test_post_question_fail(self):
         # This test checks if posting a question erroneously (without content) is being caught
-        res = self.client().post("/question", json={
+        res = self.client().post("/questions", json={
             "question": None,
             "answer": None,
             "difficulty": 1,
             "category": 1
         })
-        content = json.lods(res.data)
+        content = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
-        self.assertEqual(res["success"], False)
+        self.assertEqual(content["success"], False)
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.

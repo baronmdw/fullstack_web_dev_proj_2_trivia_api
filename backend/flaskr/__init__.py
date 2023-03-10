@@ -122,9 +122,19 @@ def create_app(dbURI='', test_config=None):
     @app.route("/questions", methods=["POST"])
     def create_question():
         try:
-            newQuestion = request.get_json
+            newQuestion = request.get_json()
             if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
                 abort(400)
+            questionToAdd = Question(question=newQuestion["question"], answer=newQuestion["answer"], category=newQuestion["category"], difficulty=newQuestion["difficulty"])
+            questionToAdd.insert()
+            return jsonify({
+                "success": True,
+                "id": questionToAdd.id,
+                "question": questionToAdd.question,
+                "answer": questionToAdd.answer,
+                "difficulty": questionToAdd.difficulty,
+                "category": questionToAdd.category
+            })
         except Exception as e:
             if isinstance(e, HTTPException):
                 abort(e.code)
