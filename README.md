@@ -367,3 +367,12 @@ Searching for a non existent category will lead to this response:
   "success": false
 }
 ```
+
+# ERROR HANDLING
+
+Following Error-Codes can be expected:
+
+400: Request was not formatted correctly -> please check if your request matches to the specification of the endpoint
+404: Resource was not found -> please change for example the id of your search since no matching result was found
+422: Request could not be handled -> you might have found an edge case, please report to us
+500: server internal error -> this should not be a case that happens often
