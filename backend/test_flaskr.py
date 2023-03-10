@@ -115,6 +115,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(content["success"], False)
 
     def test_search_questions_based_on_category(self):
+        # This test checks if the search for all questions of one category is working correctly
         res = self.client().get("/categories/1/questions")
         content = json.loads(res.data)
 
@@ -126,6 +127,7 @@ class TriviaTestCase(unittest.TestCase):
 
 
     def test_serach_questions_based_on_category_fail(self):
+        # This test checks if a request to a non-exisiting category leads to a correct errormessage
         res = self.client().get("/categories/1000000/questions")
         content = json.loads(res.data)
 

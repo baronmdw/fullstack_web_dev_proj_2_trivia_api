@@ -198,25 +198,30 @@ def create_app(dbURI='', test_config=None):
     """
     @app.route("/categories/<int:category_id>/questions")
     def get_questions_from_category(category_id):
+        # This endpoint returns all questions belonging to a category id
         try:
             category = Category.query.filter(Category.id==category_id).one_or_none()
+            # check if category exists
             if category is None:
                 abort (404)
+            # get all questions to existing category
             questions = Question.query.filter(Question.category == category_id).all()
             questions_formatted = [ques.format() for ques in questions]
+            # return object
             return jsonify({
                 "success": True,
                 "current_category": category_id,
                 "total_questions": len(questions_formatted),
                 "questions": questions_formatted
             })
+        # errorhandling
         except Exception as e:
             if isinstance(e, HTTPException):
                 abort(e.code)
             else:
                 abort(422)
     """
-    @TODO:
+    @Done:
     Create a GET endpoint to get questions based on category.
 
     TEST: In the "List" tab / main screen, clicking on one of the

@@ -74,6 +74,56 @@ The result will look similar to this (if there have been no changes in the datab
 }
 ```
 
+### GET-QUESTIONS ENDPOINT
+
+The get all questions of category endpoint is accessible via GET-METHOD needing a category number as input parameter and returns a JSON object that contains a success-flag, an array of all questions, the amount of questions and the current category.
+
+Request as follows and replace ```<category_id>``` with the number of the category that is being searched for:
+```
+curl -X GET http://localhost:5000/categories/<category_id>/questions
+```
+
+The result will look similar to this for a successful request:
+```
+{
+  "current_category": 1,
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    },
+    {
+      "answer": "Blood",
+      "category": 1,
+      "difficulty": 4,
+      "id": 22,
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }
+  ],
+  "success": true,
+  "total_questions": 3
+}
+```
+
+An erroneous request will lead to this response:
+```
+{
+  "error": 404,
+  "message": "The requested resource could not be found",
+  "success": false
+}
+```
+
 ## QUESTIONS
 
 ### GET-ENDPOINT
