@@ -111,7 +111,17 @@ def create_app(dbURI='', test_config=None):
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions.
     """
-
+    @app.route("/questions/<int:question_id>", methods=["DELETE"])
+    def delete_question(question_id):
+        try:
+            questionToDelete = Question.query.get(question_id)
+            questionToDelete.delete()
+            return jsonify({
+                "success": True,
+                "id": questionToDelete.id
+            })
+        except:
+            abort(404)
     """
     @TODO:
     Create an endpoint to DELETE question using a question ID.

@@ -78,6 +78,23 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 400)
         self.assertEqual(content["success"], False)
+
+    def test_deletion(self):
+        # This test checks, if deleting an existing question works correctly
+        res = self.client().delete("/questions/24")
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(content["success"], True)
+        self.assertEqual(content["id"], 24)
+
+    def test_deletion_fail(self):
+        # This test checks, if deleting a non-existing question raises the right error
+        res = self.client().delete("/questions/1000000")
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(content["success"], False)
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.
