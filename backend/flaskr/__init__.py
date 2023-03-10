@@ -119,7 +119,17 @@ def create_app(dbURI='', test_config=None):
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
-
+    @app.route("/questions", methods=["POST"])
+    def create_question():
+        try:
+            newQuestion = request.get_json
+            if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
+                abort(400)
+        except Exception as e:
+            if isinstance(e, HTTPException):
+                abort(e.code)
+            else:
+                abort(422)
     """
     @TODO:
     Create an endpoint to POST a new question,
@@ -162,6 +172,13 @@ def create_app(dbURI='', test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not.
     """
+    @app.errorhandler(400)
+    def err_bad_request(error):
+        return jsonify({
+            "success": False,
+            "message": "The request was not formatted correctly",
+            "error": 400
+        }), 400
 
     @app.errorhandler(404)
     def err_not_found(error):

@@ -34,6 +34,7 @@ class TriviaTestCase(unittest.TestCase):
     # TODO (possibly): catch wrong methods for endpoint categories
 
     def test_get_questions(self):
+        # This test checks if the questions can be fetched successfully
         res = self.client().get("/questions?page=1")
         content = json.loads(res.data)
 
@@ -43,11 +44,40 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(content["success"], True)
 
     def test_get_questions_fail(self):
+        # This test checks if a error response is transmitted if a not-existing page is called for questions
         res = self.client().get("/questions?page=1000000000")
         content = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(content["success"], False)
+
+    def test_post_question(self):
+        # This test checks if posting a question with content works successfully
+        res = self.client().post("/questions", json={
+            "question": "TestQuestion",
+            "answer": "TestAnswer",
+            "difficulty": 1,
+            "category": 1
+        })
+        content = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res["success"], True)
+        self.assertIsNotNone(res["id"])
+        self.assertIsNotNone(res["question"])
+
+    def test_post_question_fail(self):
+        # This test checks if posting a question erroneously (without content) is being caught
+        res = self.client().post("/question", json={
+            "question": None,
+            "answer": None,
+            "difficulty": 1,
+            "category": 1
+        })
+        content = json.lods(res.data)
+
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res["success"], False)
     """
     TODO
     Write at least one test for each test for successful operation and for expected errors.
