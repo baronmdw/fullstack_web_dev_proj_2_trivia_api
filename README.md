@@ -333,3 +333,37 @@ Trying to delete a non-existing questions will lead to this response:
   "success": false
 }
 ```
+
+## QUIZZES
+
+### POST-ENDPOINT
+
+This endpoint is accessible via the POST-METHOD and needs a JSON-object containing an array of already posted questions (previous_questions) and the category of the quiz (quiz_category). It returns a JSON-Object with a success status and the object of the next question.
+
+Request as follows replacing ```<previous_ids>``` with the ids of all questions that have already been posted separated by a comma (,) and ```<category_id>``` by the id of the category of the quiz (0 for all categories):
+```
+curl -X POST http://localhost:5000/quizzes -H "Content-Type: application/json" -d "{\"previous_questions\":[<previous_ids>], \"quiz_category\":{\"id\":<category_id>}}" 
+```
+
+A correct request will result in following response:
+```
+{
+  "question": {
+    "answer": "The Liver",
+    "category": 1,
+    "difficulty": 4,
+    "id": 20,
+    "question": "What is the heaviest organ in the human body?"
+  },
+  "success": true
+}
+```
+
+Searching for a non existent category will lead to this response:
+```
+{
+  "error": 404,
+  "message": "The requested resource could not be found",
+  "success": false
+}
+```
