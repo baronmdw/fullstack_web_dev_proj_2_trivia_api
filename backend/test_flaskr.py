@@ -97,6 +97,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(content["success"], False)
 
     def test_search_question(self):
+        # This test checks, if searching for a question works correctly
         res = self.client().post("/questions", json={"searchTerm": "What"})
         content = json.loads(res.data)
 
@@ -106,6 +107,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(content["success"], True)
 
     def test_search_question_fail(self):
+        # This test checks if making an empty post request to questions leads to an error message
         res = self.client().post("/questions")
         content = json.loads(res.data)
 

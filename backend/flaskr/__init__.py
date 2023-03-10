@@ -134,6 +134,7 @@ def create_app(dbURI='', test_config=None):
     def create_question():
         # This endpoint combines to post-request methods: one to get questions based on a search term and another one to create new questions
         newQuestion = request.get_json()
+        # Go into search stream 
         if "searchTerm" in newQuestion:
             try:
                 pageNr = 1
@@ -145,9 +146,6 @@ def create_app(dbURI='', test_config=None):
                 # check if request was on last page
                 elif len(questions_formatted)>(pageNr-1)*QUESTIONS_PER_PAGE:
                     questions_paginated = questions_formatted[(pageNr-1)*QUESTIONS_PER_PAGE:]
-                # if request was on page behind last page (available pages)
-                else:
-                    abort(404)
                 # return requested content
                 return jsonify({
                     "success": True,
@@ -158,7 +156,7 @@ def create_app(dbURI='', test_config=None):
             except:
                 abort(400)
         else:
-            # This endpoint serves the creation of a question with answer, category and difficulty
+            # This route serves the creation of a question with answer, category and difficulty
             try:
                 if (newQuestion["question"] is None or newQuestion["answer"] is None or newQuestion["category"] is None or newQuestion["difficulty"] is None):
                     abort(400)
@@ -189,7 +187,7 @@ def create_app(dbURI='', test_config=None):
     """
 
     """
-    @TODO:
+    @Done:
     Create a POST endpoint to get questions based on a search term.
     It should return any questions for whom the search term
     is a substring of the question.

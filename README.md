@@ -184,6 +184,8 @@ For an unsuccessful request the response will look like this:
 
 ### POST-ENDPOINT
 
+#### Creation
+
 The questions creation endpoint is accessible via POST-METHOD needing a JSON-Object containing a string each for question and answer and integers for the difficulty (1-5) and the category of the question. All of the named options are mandatory. It returns a JSON-Object with a success status as well as the id, question, answer, difficulty and category of the created object.
 
 Request as follows:
@@ -211,6 +213,50 @@ For an erroneous request the response will look like this:
   "success": false
 }
 ```
+
+#### Search
+
+The search questions endpoint is accessible via POST-METHOD needing a JSON-Object containing a string called by the key searchTerm. It returns a JSON object with a success status, an array with all questions that match the search-term, the amount of identified questions and the current category.
+
+Request as follows replacing ```<search-string>``` with the string that should be searched:
+```
+curl -X POST http://localhost:5000/questions -H "Content-Type: application/json" -d "{\"searchTerm\":\"<search-string>\"}"
+```
+
+Successful request will lead to following result (example made with "title" as search-string):
+```
+{
+  "currentCategroy": "ALL",
+  "questions": [
+    {
+      "answer": "Maya Angelou",
+      "category": 4,
+      "difficulty": 2,
+      "id": 5,
+      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+    },
+    {
+      "answer": "Edward Scissorhands",
+      "category": 5,
+      "difficulty": 3,
+      "id": 6,
+      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+    }
+  ],
+  "success": true,
+  "total_questions": 2
+}
+```
+
+Erroneous request will result in this response:
+```
+{
+  "error": 400,
+  "message": "The request was not formatted correctly",
+  "success": false
+}
+```
+
 
 ### DELETE-ENDPOINT
 
