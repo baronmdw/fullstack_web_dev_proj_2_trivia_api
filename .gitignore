@@ -2,6 +2,7 @@
 __pycache__
 venv
 backend/project2/
+.env
 
 # OS generated files #
 ######################
