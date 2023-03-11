@@ -18,6 +18,20 @@ Completing this trivia app will give you the ability to structure plan, implemen
 
 ### Backend
 
+#### IMPORTANT
+Create a .ENV file in the backend folder containing following information/variables and replace with your information:
+```
+DB_USER = "<username>"
+DB_PASSWORD = "<password>"
+DB_HOST = "<host:port>"
+DB_NAME = "<databasename>"
+DB_TEST_USER = "<username_for_test>"
+DB_TEST_PASSWORD = "<password_for_test>"
+DB_TEST_HOST = "<host:port_for_test>"
+DB_TEST_NAME = "<databasename_for_test>"
+```
+
+#### SETTING UP THE BACKEND
 > View the [Backend README](./backend/README.md) for more details.
 
 ### Frontend
